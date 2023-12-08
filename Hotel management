@@ -1,0 +1,134 @@
+#include<iostream>
+#include<string>
+#include<iomanip>
+#include<fstream>
+
+using namespace std;
+
+class room
+{
+    public:
+    string name,phone,address ;
+    int roomno;
+    void add()
+    {
+        ofstream push("guests.txt", ios::app);
+        
+        cout<<"Enter Guest details:"<<endl;
+        cout<<"Name :"<<endl;
+        getline(cin>>ws,name);
+        cout<<"Phone number:"<<endl;
+        getline(cin>>ws,phone);
+        cout<<"Address :"<<endl;
+        getline(cin>>ws,address);
+        cout<<"Room Number:"<<endl;
+        cin>>roomno;
+
+        push<<name<<"|"<<phone<<"|"<<address<<"|"<<roomno<<endl;
+
+        cout << "Guest added successfully!" << endl;
+        push.close();
+    }
+
+    void display()
+    {
+        ifstream pull("guests.txt");
+
+        cout << setw(20) << "Name" << setw(20) << "Address" << setw(15) << "Phone" << setw(15) << "Room Number" << endl;
+        cout << setfill('-') << setw(80) << "-" << setfill(' ') << endl;
+
+        string name, address, phone;
+        int roomnumber;
+        string line;
+        while (getline(pull, line)) {
+        stringstream str(line);
+        string name, address, phone;
+        int roomNumber;
+
+        getline(str, name, '|');
+        getline(str, address, '|');
+        getline(str, phone, '|');
+        str >> roomNumber;
+
+        cout << setw(20) << name << setw(20) << address << setw(15) << phone << setw(15) << roomNumber << endl;
+    }
+
+        pull.close();
+    }
+
+    void search()
+    {
+        ifstream pull("guests.txt");
+        string searchname;
+        cout<<"enter name to search:"<<endl;
+        cin>>searchname;
+        
+        bool found = false;
+        string line;
+        while (getline(pull, line)) {
+        stringstream str(line);
+        string name, address, phone;
+        int roomnumber;
+
+        getline(str, name, '|');
+        getline(str, address, '|');
+        getline(str, phone, '|');
+        str >> roomnumber;
+
+        if (name == searchname) {
+            found = true;
+            cout << setw(20) << "Name" << setw(30) << "Address" << setw(15) << "Phone" << setw(15) << "Room Number" << endl;
+            cout << setfill('-') << setw(80) << "-" << setfill(' ') << endl;
+            cout << setw(20) << name << setw(30) << address << setw(15) << phone << setw(15) << roomnumber << endl;
+            break;
+        }
+    }
+
+    if (!found) {
+        cout << "Guest not found!" << endl;
+    }
+    pull.close();
+    } 
+
+};
+int main()
+{
+    room r;
+    int choice;
+    do
+    {
+        /* code */
+        cout<<"Enter choice:"<<endl;
+        cout<<"1:Add Guest"<<endl;
+        cout<<"2:display guests"<<endl;
+        cout<<"3:Search Guest"<<endl;
+        cin>>choice;
+        switch(choice)
+        {
+            case 1:
+            {
+                r.add();
+                break;
+            }
+            case 2:
+            {
+                r.display();
+                break;
+            }
+
+            case 3:
+            {
+                r.search();
+                break;
+            }
+            case 4:
+            {
+                cout<<"Thank you for visiting us";
+            }
+            default:
+                cout<<"Invalid";
+        }
+    } while (choice!=5);
+    
+    return 0;
+}
